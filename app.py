@@ -13,63 +13,75 @@ app = dash.Dash(__name__)
 server = app.server  # Needed for Render deployment
 
 #layout of html 
-app.layout = html.Div([
-    html.H1("📚 Student Grade Predictor", style={
+app.layout = html.Div(style={
+    'backgroundColor': '#0b132b',
+    'padding': '40px',
+    'minHeight': '100vh',
+    'fontFamily': 'Segoe UI, sans-serif',
+    'color': '#fff'
+}, children=[
+    html.H1("📘 Student Grade Predictor", style={
         'textAlign': 'center',
-        'marginBottom': '40px',
-        'color': '#222'
+        'marginBottom': '50px',
+        'color': '#5bc0be',
+        'fontSize': '36px'
     }),
 
     html.Div([
         html.Div([
-            html.Label("GPA:"),
-            dcc.Input(id='gpa', type='number', min=0, max=4, step=0.01, style={'width': '100%'})
-        ], style={'margin': '10px'}),
+            html.Label("GPA:", style={'color': '#fff'}),
+            dcc.Input(id='gpa', type='number', min=0, max=4, step=0.01,
+                      style={'width': '100%', 'padding': '10px', 'borderRadius': '5px', 'border': '1px solid #3a506b', 'backgroundColor': '#1c2541', 'color': 'white'})
+        ]),
 
         html.Div([
-            html.Label("Study Time Weekly (hours):"),
-            dcc.Input(id='study_time', type='number', min=0, step=0.1, style={'width': '100%'})
-        ], style={'margin': '10px'}),
+            html.Label("Study Time Weekly (hours):", style={'color': '#fff'}),
+            dcc.Input(id='study_time', type='number', min=0, step=0.1,
+                      style={'width': '100%', 'padding': '10px', 'borderRadius': '5px', 'border': '1px solid #3a506b', 'backgroundColor': '#1c2541', 'color': 'white'})
+        ]),
 
         html.Div([
-            html.Label("Absences:"),
-            dcc.Input(id='absences', type='number', min=0, style={'width': '100%'})
-        ], style={'margin': '10px'}),
+            html.Label("Absences:", style={'color': '#fff'}),
+            dcc.Input(id='absences', type='number', min=0,
+                      style={'width': '100%', 'padding': '10px', 'borderRadius': '5px', 'border': '1px solid #3a506b', 'backgroundColor': '#1c2541', 'color': 'white'})
+        ]),
 
         html.Div([
-            html.Label("Parental Support (0–4):"),
-            dcc.Input(id='parental_support', type='number', min=0, max=4, style={'width': '100%'})
-        ], style={'margin': '10px'}),
+            html.Label("Parental Support (0–4):", style={'color': '#fff'}),
+            dcc.Input(id='parental_support', type='number', min=0, max=4,
+                      style={'width': '100%', 'padding': '10px', 'borderRadius': '5px', 'border': '1px solid #3a506b', 'backgroundColor': '#1c2541', 'color': 'white'})
+        ]),
 
         html.Div([
-            html.Label("Parental Education (0–4):"),
-            dcc.Input(id='parental_edu', type='number', min=0, max=4, style={'width': '100%'})
-        ], style={'margin': '10px'}),
+            html.Label("Parental Education (0–4):", style={'color': '#fff'}),
+            dcc.Input(id='parental_edu', type='number', min=0, max=4,
+                      style={'width': '100%', 'padding': '10px', 'borderRadius': '5px', 'border': '1px solid #3a506b', 'backgroundColor': '#1c2541', 'color': 'white'})
+        ])
     ], style={
         'display': 'grid',
-        'gridTemplateColumns': 'repeat(auto-fit, minmax(250px, 1fr))',
+        'gridTemplateColumns': 'repeat(auto-fit, minmax(240px, 1fr))',
         'gap': '20px',
-        'padding': '0 30px'
+        'marginBottom': '30px'
     }),
 
     html.Div([
         html.Button('🎯 Predict Grade', id='predict-btn', n_clicks=0, style={
-            'marginTop': '30px',
-            'padding': '12px 24px',
+            'marginTop': '20px',
+            'padding': '15px 30px',
             'fontSize': '16px',
-            'backgroundColor': '#4CAF50',
-            'color': 'white',
-            'border': 'none',
+            'backgroundColor': '#1c2541',
+            'color': '#5bc0be',
+            'border': '2px solid #5bc0be',
             'borderRadius': '5px',
             'cursor': 'pointer'
-        }),
+        })
     ], style={'textAlign': 'center'}),
 
     html.Div(id='prediction-output', style={
         'marginTop': '40px',
         'textAlign': 'center',
         'fontSize': '24px',
-        'color': '#333'
+        'color': '#edf2f4'
     })
 ])
 
