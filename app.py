@@ -14,28 +14,65 @@ server = app.server  # Needed for Render deployment
 
 #layout of html 
 app.layout = html.Div([
-    html.H1("📚 Student Grade Predictor", style={'textAlign': 'center'}),
-    
+    html.H1("📚 Student Grade Predictor", style={
+        'textAlign': 'center',
+        'marginBottom': '40px',
+        'color': '#222'
+    }),
+
     html.Div([
-        html.Label("GPA:"),
-        dcc.Input(id='gpa', type='number', min=0, max=4, step=0.01),
-        
-        html.Label("Study Time Weekly (hours):"),
-        dcc.Input(id='study_time', type='number', min=0, step=0.1),
+        html.Div([
+            html.Label("GPA:"),
+            dcc.Input(id='gpa', type='number', min=0, max=4, step=0.01, style={'width': '100%'})
+        ], style={'margin': '10px'}),
 
-        html.Label("Absences:"),
-        dcc.Input(id='absences', type='number', min=0),
+        html.Div([
+            html.Label("Study Time Weekly (hours):"),
+            dcc.Input(id='study_time', type='number', min=0, step=0.1, style={'width': '100%'})
+        ], style={'margin': '10px'}),
 
-        html.Label("Parental Support (0–4):"),
-        dcc.Input(id='parental_support', type='number', min=0, max=4),
+        html.Div([
+            html.Label("Absences:"),
+            dcc.Input(id='absences', type='number', min=0, style={'width': '100%'})
+        ], style={'margin': '10px'}),
 
-        html.Label("Parental Education (0–4):"),
-        dcc.Input(id='parental_edu', type='number', min=0, max=4),
-    ], style={'columnCount': 2, 'padding': '20px'}),
+        html.Div([
+            html.Label("Parental Support (0–4):"),
+            dcc.Input(id='parental_support', type='number', min=0, max=4, style={'width': '100%'})
+        ], style={'margin': '10px'}),
 
-    html.Button('Predict Grade', id='predict-btn', n_clicks=0, style={'margin': '20px'}),
-    html.Div(id='prediction-output', style={'fontSize': 24, 'textAlign': 'center'})
+        html.Div([
+            html.Label("Parental Education (0–4):"),
+            dcc.Input(id='parental_edu', type='number', min=0, max=4, style={'width': '100%'})
+        ], style={'margin': '10px'}),
+    ], style={
+        'display': 'grid',
+        'gridTemplateColumns': 'repeat(auto-fit, minmax(250px, 1fr))',
+        'gap': '20px',
+        'padding': '0 30px'
+    }),
+
+    html.Div([
+        html.Button('🎯 Predict Grade', id='predict-btn', n_clicks=0, style={
+            'marginTop': '30px',
+            'padding': '12px 24px',
+            'fontSize': '16px',
+            'backgroundColor': '#4CAF50',
+            'color': 'white',
+            'border': 'none',
+            'borderRadius': '5px',
+            'cursor': 'pointer'
+        }),
+    ], style={'textAlign': 'center'}),
+
+    html.Div(id='prediction-output', style={
+        'marginTop': '40px',
+        'textAlign': 'center',
+        'fontSize': '24px',
+        'color': '#333'
+    })
 ])
+
 
 # logic for callbacks when buttons are clicked
 @app.callback(
