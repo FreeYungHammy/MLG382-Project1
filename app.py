@@ -68,7 +68,9 @@ def predict_grade(n_clicks, gpa, study_time, absences, support, edu):
     return f" Predicted Grade: {grade_map.get(prediction, '?')}"
 
 #running the app
-if __name__ == '__main__':
-    app.run(debug=True)
+import os
 
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 8050))
+    app.run(debug=True, host="0.0.0.0", port=port)
 
