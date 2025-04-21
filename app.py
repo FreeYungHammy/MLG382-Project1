@@ -69,4 +69,6 @@ def predict_grade(n_clicks, gpa, study_time, absences, support, edu):
 
 #running the app
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run(debug=True)
+
+
