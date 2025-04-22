@@ -1,6 +1,7 @@
 import dash
 from dash import html, dcc, Input, Output, State
 import joblib
+import pandas as pd
 import os
 
 # Load inference pipeline
@@ -17,6 +18,7 @@ feature_cols = [
     'Music', 'Volunteering'
 ]
 
+# Sidebar component
 def sidebar():
     return html.Div(className="sidebar", children=[
         html.H2("BrightPath Academy", className="sidebar-header"),
@@ -29,7 +31,7 @@ def sidebar():
         ])
     ])
 
-#importing pages
+# Import page layouts
 from pages import (
     home_layout,
     analytics_layout,
@@ -38,6 +40,10 @@ from pages import (
     feedback_layout,
 )
 
+# Import and register the Predict‐page callbacks
+from pages.predict import register_callbacks as register_predict_callbacks
+register_predict_callbacks(app, pipeline)
+
 # Main layout with Location for routing
 app.layout = html.Div(className="app-container", children=[
     dcc.Location(id="url", refresh=False),
@@ -45,7 +51,7 @@ app.layout = html.Div(className="app-container", children=[
     html.Div(id="page-content", className="content")
 ])
 
-# Route callback
+# Routing callback
 @app.callback(
     Output("page-content", "children"),
     Input("url", "pathname")
