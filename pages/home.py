@@ -47,7 +47,7 @@ layout = html.Div(className="content", children=[
 
         html.H1("Welcome to BrightPath GradeClass Predictor"),
         html.P(
-            "This interactive app uses a tuned SMOTE‑MLP model to predict "
+            "This interactive app uses a tuned model to predict"
             "a student’s GradeClass based on demographics, study habits, "
             "and extracurricular involvement."
         ),

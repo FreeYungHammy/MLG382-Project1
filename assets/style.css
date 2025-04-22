@@ -99,9 +99,21 @@ button {
 
 /* Chart background override */
 .plotly-graph-div .js-plotly-plot .plotly {
-  background-color: #1a1a2e !important;
+  background-color: #303055 !important;
 }
 
 button:hover {
   opacity: 0.9;
+}
+
+img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 10px;
+  display: block;
+}
+
+h2 {
+  margin-top: 40px;
+  color: #5bc0be;
 }
