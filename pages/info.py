@@ -1,7 +1,7 @@
 # pages/info.py
 from dash import html, dcc
 import pandas as pd
-import dash_table 
+from dash import dash_table
 import os
 
 # displaying dataset
