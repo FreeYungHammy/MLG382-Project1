@@ -6,7 +6,7 @@ import numpy as np
 import os
 
 # Load the trained pipeline
-pipeline = joblib.load("grade_predictor_final_pipeline.pkl")
+pipeline = joblib.load("grade_predictor_inference_pipeline.pkl")
 
 # Initialize Dash
 app = dash.Dash(__name__)
