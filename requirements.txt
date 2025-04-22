@@ -1,5 +1,8 @@
 dash
+pandas
 numpy
 scikit-learn
+imbalanced-learn
 joblib
-pandas
+matplotlib
+seaborn
