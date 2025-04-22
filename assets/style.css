@@ -80,6 +80,28 @@ button {
   cursor: pointer;
 }
 
+.home-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  margin: 0 10px;
+  font-size: 1em;
+  width: auto;
+}
+
+/* Card‐style for the Home page */
+.home-panel {
+  background-color: #0f1a2b;
+  padding: 30px;
+  border-radius: 8px;
+  max-width: 900px;
+  margin: 40px auto;
+}
+
+/* Chart background override */
+.plotly-graph-div .js-plotly-plot .plotly {
+  background-color: #1a1a2e !important;
+}
+
 button:hover {
   opacity: 0.9;
 }

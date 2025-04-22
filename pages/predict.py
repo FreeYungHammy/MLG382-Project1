@@ -63,21 +63,30 @@ def register_callbacks(app, pipeline):
         [State(f"input-{col}", "value") for col in feature_cols]
     )
     def predict(n_clicks, *vals):
+        #only run after button click and when all values are present
         if not n_clicks or None in vals:
             return ""
         
+        # build raw DataFrame of the 12 inputs 
         raw = pd.DataFrame([vals], columns=feature_cols).astype(float)
-        # … your feature engineering …
-        X_model = raw[[ 
+        
+        # these MUST run BEFORE we slice X_model
+        raw['SupportScore']  = raw['ParentalSupport'] * raw['Extracurricular']
+        raw['SupportedGPA']  = raw['GPA'] + 0.1 * raw['ParentalSupport']
+        raw['ExtraWork']     = raw['StudyTimeWeekly'] * raw['Tutoring']
+        
+        # pipeline scaler expects
+        X_model = raw[[
             'StudyTimeWeekly','Absences','Tutoring','ParentalSupport',
             'GPA','SupportScore','SupportedGPA','ExtraWork'
         ]]
-
-        # scaling and prediction
+        
+        # scale & predict
         scaler = pipeline.named_steps['scaler']
         mlp    = pipeline.named_steps['mlp']
         X_scaled = scaler.transform(X_model)
         pred      = mlp.predict(X_scaled)[0]
-
+        
+        # 6) letter and return
         grade_map = {0:"A",1:"B",2:"C",3:"D",4:"F"}
         return f"Predicted GradeClass: {grade_map[pred]}"
