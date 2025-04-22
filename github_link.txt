@@ -1,1 +1,4 @@
+GitHub Link:
 https://github.com/FreeYungHammy/MLG382-Project1
+Render Link: (will shut down if there's no activity so give it roughly 5-10 mins to redeploy when it receives activity)
+https://grade-predictor-j4yq.onrender.com/
