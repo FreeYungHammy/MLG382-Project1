@@ -8,8 +8,11 @@ import os
 pipeline = joblib.load("grade_predictor_inference_pipeline.pkl")
 
 # Initialize Dash 
-app = dash.Dash(__name__, assets_folder="assets")
-server = app.server  # for Render deployment
+app = dash.Dash(
+    __name__,
+    assets_folder="assets",
+    suppress_callback_exceptions=True
+)
 
 # Sidebar component 
 def sidebar():
