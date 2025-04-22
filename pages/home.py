@@ -70,24 +70,30 @@ layout = html.Div(className="content", children=[
 
         # Meet the Team
         html.H2("Meet the Team"),
-        html.Ul([
-            html.Li([
-                html.Strong("Glory Binkatabana: "),
-                "Problem statement, hypothesis, data loading & understanding"
+
+        html.Div([
+            html.Div(className="team-card", children=[
+                html.H4("Glory Binkatabana"),
+                html.P("Problem statement, hypothesis, data loading & understanding")
             ]),
-            html.Li([
-                html.Strong("Tiaan Wessels: "),
-                "Univariate & bivariate EDA, missing‐value & outlier treatment"
+        html.Div(className="team-card", children=[
+                html.H4("Tiaan Wessels"),
+                html.P("Univariate & bivariate EDA, missing‐value & outlier treatment")
             ]),
-            html.Li([
-                html.Strong("Storm Tarran: "),
-                "Evaluation metrics, feature engineering, baseline models"
+        html.Div(className="team-card", children=[
+                html.H4("Storm Tarran"),
+                html.P("Evaluation metrics, feature engineering, baseline models")
             ]),
-            html.Li([
-                html.Strong("Calvin Ronin Nijenhuis: "),
-                "Deep learning model & app deployment on Render"
+        html.Div(className="team-card", children=[
+                html.H4("Calvin Ronin Nijenhuis"),
+                html.P("Deep learning model & app deployment on Render")
             ]),
-        ], style={'lineHeight':'1.6em'}),
+            ], style={
+                "display": "grid",
+                "gridTemplateColumns": "repeat(auto-fit, minmax(240px, 1fr))",
+                "gap": "20px",
+                "marginTop": "30px"
+        }),
 
         # Footer
         html.Div(
