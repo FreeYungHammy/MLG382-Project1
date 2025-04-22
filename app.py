@@ -1,24 +1,17 @@
 import dash
-from dash import html, dcc, Input, Output, State
+from dash import html, dcc
+from dash.dependencies import Input, Output, State
 import joblib
-import pandas as pd
 import os
 
-# Load inference pipeline
+# Load the trained inference pipeline 
 pipeline = joblib.load("grade_predictor_inference_pipeline.pkl")
 
-# Initialize Dash
+# Initialize Dash 
 app = dash.Dash(__name__, assets_folder="assets")
-server = app.server
+server = app.server  # for Render deployment
 
-# Features for inputs
-feature_cols = [
-    'Age', 'Gender', 'Ethnicity', 'StudyTimeWeekly', 'Absences',
-    'Tutoring', 'ParentalSupport', 'Extracurricular', 'Sports',
-    'Music', 'Volunteering'
-]
-
-# Sidebar component
+# Sidebar component 
 def sidebar():
     return html.Div(className="sidebar", children=[
         html.H2("BrightPath Academy", className="sidebar-header"),
@@ -31,27 +24,25 @@ def sidebar():
         ])
     ])
 
-# Import page layouts
-from pages import (
-    home_layout,
-    analytics_layout,
-    info_layout,
-    predict_layout,
-    feedback_layout,
-)
+# Import page layouts & callback registrars 
+from pages.home      import layout as home_layout
+from pages.analytics import layout as analytics_layout
+from pages.info      import layout as info_layout
+from pages.predict   import layout as predict_layout, register_callbacks as register_predict
+from pages.feedback  import layout as feedback_layout, register_callbacks as register_feedback
 
-# Import and register the Predict‐page callbacks
-from pages.predict import register_callbacks as register_predict_callbacks
-register_predict_callbacks(app, pipeline)
+# Register page‑specific callbacks 
+register_predict(app, pipeline)
+register_feedback(app)
 
-# Main layout with Location for routing
+# Main app layout with client‑side routing 
 app.layout = html.Div(className="app-container", children=[
     dcc.Location(id="url", refresh=False),
     sidebar(),
     html.Div(id="page-content", className="content")
 ])
 
-# Routing callback
+# Router: swap page content based on URL
 @app.callback(
     Output("page-content", "children"),
     Input("url", "pathname")
@@ -67,7 +58,7 @@ def display_page(pathname):
         return feedback_layout
     return home_layout
 
-# Run server
+# Run the server 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8050))
     app.run(debug=True, host="0.0.0.0", port=port)
