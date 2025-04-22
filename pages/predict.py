@@ -2,26 +2,26 @@
 from dash import html, dcc, Input, Output, State
 import pandas as pd
 
-# 11 raw inputs + metadata
-
+# ─── 1) Metadata for each input ────────────────────────────────────────────
 feature_info = {
     "Age":             { "placeholder":"15–18",    "min":15, "max":18,   "step":1,    "desc":"Student age in years." },
-    "Gender":          { "placeholder":"Female = 1, Male = 0", "min":0,  "max":1,    "step":1,    "desc":"0 for Male, 1 for Female." },
-    "Ethnicity":       { "placeholder":"0–3",      "min":0,  "max":3,    "step":1,    "desc":"Caucasian = 0, African American = 1, Asian = 2, Other = 3." },
+    "Gender":          { "placeholder":"0=Male,1=Female", "min":0,  "max":1,    "step":1,    "desc":"0 for Male, 1 for Female." },
+    "Ethnicity":       { "placeholder":"0–3",      "min":0,  "max":3,    "step":1,    "desc":"0=Caucasian,1=AfAm,2=Asian,3=Other." },
     "GPA":             { "placeholder":"2.0–4.0",  "min":2.0,"max":4.0,  "step":0.01, "desc":"Grade Point Average." },
     "StudyTimeWeekly": { "placeholder":"0–20",     "min":0,  "max":20,   "step":0.5,  "desc":"Hours spent studying per week." },
     "Absences":        { "placeholder":"0–30",     "min":0,  "max":30,   "step":1,    "desc":"Number of absences in the year." },
-    "Tutoring":        { "placeholder":"Yes = 1, No = 0",   "min":0,  "max":1,    "step":1,    "desc":"1 if student uses a tutor, 0 otherwise." },
-    "ParentalSupport": { "placeholder":"0–4",      "min":0,  "max":4,    "step":1,    "desc":"Very high parental support = 4, none = 0." },
-    "Extracurricular": { "placeholder":"Yes = 1, No = 0",   "min":0,  "max":1,    "step":1,    "desc":"1 if the student has extracurricular activities, 0 otherwise." },
-    "Sports":          { "placeholder":"Yes = 1, No = 0",   "min":0,  "max":1,    "step":1,    "desc":"1 if the student participates in sports, 0 otherwise." },
-    "Music":           { "placeholder":"Yes = 1, No = 0",   "min":0,  "max":1,    "step":1,    "desc":"1 if the student participates in music, 0 otherwise." },
-    "Volunteering":    { "placeholder":"Yes = 1, No = 0",   "min":0,  "max":1,    "step":1,    "desc":"1 if the student volunteers, 0 otherwise." },
+    "Tutoring":        { "placeholder":"Yes=1,No=0", "min":0,  "max":1,    "step":1,    "desc":"1 if student uses a tutor, 0 otherwise." },
+    "ParentalSupport": { "placeholder":"0–4",      "min":0,  "max":4,    "step":1,    "desc":"0=None → 4=Very High support." },
+    "Extracurricular": { "placeholder":"Yes=1,No=0", "min":0,  "max":1,    "step":1,    "desc":"1 if the student has extracurricular activities, 0 otherwise." },
+    "Sports":          { "placeholder":"Yes=1,No=0", "min":0,  "max":1,    "step":1,    "desc":"1 if the student participates in sports, 0 otherwise." },
+    "Music":           { "placeholder":"Yes=1,No=0", "min":0,  "max":1,    "step":1,    "desc":"1 if the student participates in music, 0 otherwise." },
+    "Volunteering":    { "placeholder":"Yes=1,No=0", "min":0,  "max":1,    "step":1,    "desc":"1 if the student volunteers, 0 otherwise." }
 }
 
+# ─── 2) List of raw feature names in the order you’ll ask them ──────────────
 feature_cols = list(feature_info.keys())
 
-# input cards and relative metadata
+# ─── 3) Build input cards for each feature ─────────────────────────────────
 input_cards = []
 for col in feature_cols:
     info = feature_info[col]
@@ -37,11 +37,11 @@ for col in feature_cols:
                 step=info["step"],
                 style={"width":"100%"}
             ),
-            html.Small(info["desc"], style={"color":"#ccc", "fontSize":"0.8em"})
+            html.Small(info["desc"], style={"color":"#ccc","fontSize":"0.8em"})
         ])
     )
 
-# layout
+# ─── 4) Layout definition ─────────────────────────────────────────────────
 layout = html.Div(className="content", children=[
     html.H1("Make a Prediction"),
     html.Div(
@@ -56,6 +56,7 @@ layout = html.Div(className="content", children=[
     html.Div(id="prediction-output", style={"marginTop":"20px","fontSize":"24px"})
 ])
 
+# ─── 5) Callback registration ─────────────────────────────────────────────
 def register_callbacks(app, pipeline):
     @app.callback(
         Output("prediction-output", "children"),
@@ -63,30 +64,26 @@ def register_callbacks(app, pipeline):
         [State(f"input-{col}", "value") for col in feature_cols]
     )
     def predict(n_clicks, *vals):
-        #only run after button click and when all values are present
         if not n_clicks or None in vals:
             return ""
         
-        # build raw DataFrame of the 12 inputs 
+        # Build raw DataFrame
         raw = pd.DataFrame([vals], columns=feature_cols).astype(float)
         
-        # these MUST run BEFORE we slice X_model
+        # Engineer features
         raw['SupportScore']  = raw['ParentalSupport'] * raw['Extracurricular']
         raw['SupportedGPA']  = raw['GPA'] + 0.1 * raw['ParentalSupport']
         raw['ExtraWork']     = raw['StudyTimeWeekly'] * raw['Tutoring']
         
-        # pipeline scaler expects
-        X_model = raw[[
-            'StudyTimeWeekly','Absences','Tutoring','ParentalSupport',
-            'GPA','SupportScore','SupportedGPA','ExtraWork'
-        ]]
-        
-        # scale & predict
+        # Dynamically pick the exact columns the scaler expects
         scaler = pipeline.named_steps['scaler']
-        mlp    = pipeline.named_steps['mlp']
-        X_scaled = scaler.transform(X_model)
-        pred      = mlp.predict(X_scaled)[0]
+        required = list(scaler.feature_names_in_)
+        X_model = raw[required]
         
-        # 6) letter and return
+        # Scale & predict
+        X_scaled = scaler.transform(X_model)
+        pred     = pipeline.named_steps['mlp'].predict(X_scaled)[0]
+        
+        # Map to letter
         grade_map = {0:"A",1:"B",2:"C",3:"D",4:"F"}
-        return f"Predicted GradeClass: {grade_map[pred]}"
+        return f"🎯 Predicted GradeClass: {grade_map[pred]}"
