@@ -1,3 +1,12 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #1a1a2e;
+}
+.app-container {
+  background-color: #1a1a2e;
+  min-height: 100vh;
+}
 
 /* ---- Sidebar ---- */
 .sidebar {
@@ -36,11 +45,6 @@
 .sidebar-link.active {
   background-color: #e94560;
   color: #ffffff;
-}
-
-/* ---- Page Container ---- */
-.app-container {
-  display: flex;
 }
 
 .content {
