@@ -35,7 +35,7 @@ A collaborative machine learning project for student performance classification 
 ## Deployment
 - The application is live and hosted using Render: https://grade-predictor-j4yq.onrender.com/
 
-##Deployment Steps:
+## Deployment Steps:
 
 - Push code to GitHub
 
